@@ -10,7 +10,7 @@ class PlannerSession(Base):
     user_id = Column(Integer, nullable=False)
 
     destination = Column(String, nullable=True)
-    travel_date = Column(String, nullable=True)
+    travel_date = Column(DateTime, nullable=True)
     duration_nights = Column(Integer, nullable=True)
     budget_range = Column(String, nullable=True)
     trip_style = Column(String, nullable=True)
