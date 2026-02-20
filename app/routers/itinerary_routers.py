@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from sqlmodel import Session
+from sqlalchemy.orm import Session
 from app.database.connection import get_db
 from app.services.itinerary_services import itinerary_service
 from app.schemas.itinerary import GenerateItineraryRequest

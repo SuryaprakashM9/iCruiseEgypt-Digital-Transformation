@@ -1,12 +1,12 @@
 from typing import List
 
 from fastapi import APIRouter,Depends
-from sqlmodel import Session
+from sqlalchemy.orm import Session
 from app.database.connection import get_db
 from  app.schemas.user_input import user_input
 from app.models.ai_intent_model import ai_intents
 from app.models.planner_session import PlannerSession
-from app.models.cruise_metadata import cruise_metadata
+from app.models.cruise_metadata import CruiseMetadata 
 import nltk
 import re
 from  nltk.corpus import stopwords
@@ -113,12 +113,15 @@ def  wizard(user_inputs:wizards,user_id:int,db:Session=Depends(get_db)):
 @router.get("/")
 
 def get_values(user_value:str,db:Session=Depends(get_db)):
-    values=db.query(cruise_metadata).filter(cruise_metadata.key==user_value).first()
+    values=db.query(CruiseMetadata).filter(CruiseMetadata.key==user_value).first()
     if not values:
         return {"message":"no values"}
     return values
-
         
+
+@router.get("/metadata")
+def get_metadata(db: Session = Depends(get_db)):
+    return db.query(CruiseMetadata).all()
 
     
     

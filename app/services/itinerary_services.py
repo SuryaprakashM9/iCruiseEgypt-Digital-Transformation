@@ -1,10 +1,10 @@
 from sqlalchemy import select
-from sqlmodel import Session
+from sqlalchemy.orm import Session
 from app.database.connection import get_db
 from fastapi import Depends
 from app.models.planner_session import PlannerSession
 from app.models.cruises_models import cruises_table
-from app.models.sailings import sailings
+from app.models.sailings import Sailing
 
 def itinerary_service(input_id:int,db:Session):
     get_value=db.query(PlannerSession).filter(PlannerSession.user_id==input_id).first()
@@ -38,14 +38,14 @@ def itinerary_service(input_id:int,db:Session):
     #     "style": get_cruise_values.travel_style
     # }
     statement = (
-        select(cruises_table, sailings)
-        .join(sailings, sailings.cruises_id == cruises_table.id)
+        select(cruises_table, Sailing)
+        .join(Sailing, Sailing.cruises_id == cruises_table.id)
         .where(
             cruises_table.destination == user_destination,
             cruises_table.duration == user_duration_night,
             cruises_table.travel_style == user_trip_style,
-            sailings.embarkation_date >= user_date,
-            sailings.availability > 0
+            sailing.embarkation_date >= user_date,
+            sailing.availability > 0
         )
     )
 
@@ -70,7 +70,7 @@ def itinerary_service(input_id:int,db:Session):
             score+=30
         if cruise.travel_style==user_trip_style:
             score+=25
-        if cruise.price == user_budget_range:
+        if best_sailing.price <= user_budget_range:
             score += 20   
         days_diff = abs((sailing.embarkation_date.replace(tzinfo=None) - user_date).days)        
         score += max(0, 15 - days_diff)

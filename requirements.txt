@@ -6,4 +6,5 @@ python-dotenv
 pydantic
 alembic
 requests
+stripe
 
