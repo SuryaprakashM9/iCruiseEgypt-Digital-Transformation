@@ -1,11 +1,10 @@
 from pydantic import BaseModel
 from typing import Optional
 
+
 class ItineraryRequest(BaseModel):
     user_id: int
     regenerate: Optional[bool] = False
-
-
 
 
 class ItineraryResponse(BaseModel):
@@ -16,3 +15,6 @@ class ItineraryResponse(BaseModel):
     estimated_price: float
     ai_summary: str
 
+
+class GenerateItineraryRequest(BaseModel):
+    session_id: int
