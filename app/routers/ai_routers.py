@@ -69,9 +69,10 @@ def search(input:user_input,db:Session=Depends(get_db)):
     return new_records
 
 
-@router.post("/destination",response_model=wizards)#this is used to putput format
+@router.post("/destination",response_model=bool)#this is used to putput format
 
 def  wizard(user_inputs:wizards,user_id:int,db:Session=Depends(get_db)):
+    
     
      new_value=db.query(PlannerSession).filter(PlannerSession.user_id==user_id).first()
      
@@ -80,26 +81,34 @@ def  wizard(user_inputs:wizards,user_id:int,db:Session=Depends(get_db)):
          db.add(new_value)
          db.commit()
          db.refresh(new_value)
-         
-         
+             
      if user_inputs.Destination is not None:
-         new_value.destination=user_inputs.Destination     
+         new_value.destination=user_inputs.Destination 
+             
          
      if user_inputs.tavel_date is not None:
          new_value.travel_date=user_inputs.tavel_date
+         
       
      if user_inputs.Duration is not None:
          new_value.duration_nights=user_inputs.Duration
+       
      if user_inputs.Budget is not None:
          new_value.budget_range=user_inputs.Budget
+          
          
      if user_inputs.Trip is not None:
          new_value.trip_style=user_inputs.Trip
          
+     if (new_value.destination is not None and new_value.travel_date is not None and new_value.duration_nights is not None and new_value.budget_range is not None and new_value.trip_style is not None):
+         new_value.is_completed=True
+     else:
+         new_value.is_completed=False
+          
+
      db.commit()
-     db.refresh(new_value)
-                   
-     return user_inputs 
+     db.refresh(new_value)     
+     return new_value.is_completed
  
 @router.get("/")
 
