@@ -11,7 +11,7 @@ from app.models.sailings import Sailing
 # Routers
 from app.routers import ai_routers
 from app.routers import itinerary_routers 
-from app.routers import booking_router, payment_router, webhook_router
+from app.routers import booking_router, payment_router
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -23,7 +23,6 @@ app.include_router(ai_routers.router)
 app.include_router(itinerary_routers.router)
 app.include_router(booking_router.router)
 app.include_router(payment_router.router)
-app.include_router(webhook_router.router)
 
 
 @app.get("/success")
